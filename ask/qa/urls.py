@@ -2,12 +2,13 @@ from django.conf.urls import url, patterns
 
 from . import views
 
-urlpatterns = patterns('',
-    url(r'^$', views.test, name='main'),
-    url(r'^login/$', views.test, name='login'),
-    url(r'^signup/$', views.test, name='signup'),
-    url(r'^question/(?P<qid>[^/]+)/$', views.test, name='question'),
-    url(r'^ask/$', views.test, name='ask'),
-    url(r'^popular/$', views.test, name='popular'),
-    url(r'^new/$', views.test, name='new'),
+urlpatterns = patterns('qa.views',
+	url(r'^$', 'index', name='index'),
+	url(r'^login/', 'login', name='login'),
+	url(r'^signup/', 'signup', name='signup'),
+	url(r'^question/(?P<quest_id>[0-9]+)/$', 'question', name='question'),
+	url(r'^ask/', 'ask', name='ask'),
+	url(r'^answer/', 'answer', name='answer'),
+	url(r'^popular/', 'popular', name='popular'),	
+	url(r'^new/', 'test', name='new'),	
 )

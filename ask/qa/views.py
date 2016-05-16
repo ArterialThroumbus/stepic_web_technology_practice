@@ -88,9 +88,9 @@ def question(request, quest_id):
 
 def ask(request):
     user = request.user
-    #if not user.is_authenticated():
-    #   raise Http404
     if request.method == "POST":
+        if not user.is_authenticated():
+            raise Http404
         # print("POST!!!!!!!!!!!!!!!!!!!!!!!!!")
         form = AskForm(request.POST)
         if form.is_valid():
@@ -110,9 +110,9 @@ def ask(request):
 
 def answer(request):
     user = request.user
-    #if not user.is_authenticated():
-    #    raise Http404
     if request.method == "POST":
+        if not user.is_authenticated():
+            raise Http404
         form = AnswerForm(request.POST)
         if form.is_valid():
             form._user = user

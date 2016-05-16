@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from qa.forms import AskForm, AnswerForm, SignupForm, LoginForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.decorators.csrf import csrf_exempt
 
 
 def test(request, *args, **kwargs):
@@ -94,7 +95,7 @@ def ask(request):
         form = AskForm(request.POST)
         if form.is_valid():
             # print("FORM IS VALID!!!!!!!!!!!!")
-            form.author = user
+            form._user = user
             quest = form.save()
             # print("QUEST IS CREATE!!!!!!!!!!")
             url = quest.get_absolute_url()
@@ -114,7 +115,7 @@ def answer(request):
     if request.method == "POST":
         form = AnswerForm(request.POST)
         if form.is_valid():
-            form.author = user
+            form._user = user
             answer = form.save()
             url = '/question/' + form.question
             return HttpResponseRedirect(url)

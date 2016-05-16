@@ -17,9 +17,13 @@ class AskForm(forms.Form) :
 		return text
 		
 	def save(self) :
-		quest = Question.objects.create(title=self.cleaned_data['title'], text=self.cleaned_data['text'], author=self.author)
-		#quest.save()
-		return quest
+		if self._user.is_anonymous():
+			self.cleaned_data['author_id'] = 1
+		else:
+			self.cleaned_data['author'] = self._user
+		ask = Question(**self.cleaned_data)
+		ask.save()
+		return ask
 	
 class AnswerForm(forms.Form) :
 	text = forms.CharField(widget=forms.Textarea)
@@ -38,9 +42,15 @@ class AnswerForm(forms.Form) :
 		return quest_id
 	
 	def save(self) :
-		answer = Answer.objects.create(text=self.cleaned_data['text'], question=self.cleaned_data['question'], author=self.author)
-		#answer.save()
-		return answer
+		self.cleaned_data['question'] = get_object_or_404(Question, pk=self.cleaned_data['question'])
+  
+		if self._user.is_anonymous():
+		  self.cleaned_data['author_id'] = 1
+		else:     
+		  self.cleaned_data['author'] = self._user
+		post = Answer(**self.cleaned_data)
+		post.save()
+		return post
 		
 class SignupForm(forms.Form) :
 	username = forms.CharField(max_length=50)
